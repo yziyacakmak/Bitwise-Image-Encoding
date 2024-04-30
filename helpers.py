@@ -3,7 +3,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-#resimleri oku
+#Read Images from /images path
 def read_images(image_name1,image_name2):
     image_folder = 'images/'
     image1_path = os.path.join(image_folder, image_name1)
@@ -12,18 +12,16 @@ def read_images(image_name1,image_name2):
     image2 = cv2.imread(image2_path)
     image1_size = image1.shape[:2]
     image2_resized = cv2.resize(image2, (image1_size[1], image1_size[0]))
-    # cv2.imshow('Resized Image2', image2_resized)
-    # cv2.imshow('image1', image1)
     return image1,image2_resized
 
 
-#en degersiz 2 biti 0 yap
+#Set LSB 2 bits to 0 of rgb image
 def LSB_2_bit_to_0(image):
     temp=cv2.bitwise_and(image, np.array([0xFC, 0xFC, 0xFC], dtype=np.uint8))
-    # cv2.imshow('temp', temp)
     return temp
 
-#gray scale image'in en degerli 6 bitini al
+#Take MSB 6 bits of gray scaled image
+#Encode image with gray scaled image
 def encode_image(message_image,encoding_image):
     MSB_head_mask=0xC0
     MSB_middle_mask=0x30
@@ -31,7 +29,6 @@ def encode_image(message_image,encoding_image):
     
     and1=cv2.bitwise_and(message_image,MSB_head_mask)
     filter1=and1 >> 6
-    # print_binary_image(and1,filter1)
 
     and2=cv2.bitwise_and(message_image,MSB_middle_mask)
     filter2= and2 >> 4
@@ -51,6 +48,8 @@ def encode_image(message_image,encoding_image):
     save_image(cipher,"cipherImage")
     return cipher
 
+
+#Decode image 
 def decode_image(cipher_image):
     r_channel = cipher_image[:, :, 2]
     g_channel = cipher_image[:, :, 1]  
@@ -67,28 +66,27 @@ def decode_image(cipher_image):
 
     message_image=msb_head+msb_middle+msb_tail
 
-    # cv2.imshow("message",message_image)
-
     save_image(message_image,"message")
 
     return message_image
 
 
 
-
+#Save image
 def save_image(image,name):
     output_path = name+".jpg"
     cv2.imwrite(output_path, image)
 
+
+#Print pixel values as binary
 def print_binary_image(temp,shifted):
-    height, width= temp.shape   #ekstra bir return degeri daha olabilir renk kanali sayiisna gore
-    # Her bir pikselin değerini bit olarak göster
+    height, width= temp.shape   #if the image has more than 1 channel than must be 3 return variables needed
     for i in range(height):
         for j in range(width):
             pixel_value1 = temp[i, j]
             pixel_value2=shifted[i,j]
             binary_value1 = np.binary_repr(pixel_value1,width=8)
-            binary_value2 = np.binary_repr(pixel_value2,width=8) # Piksel değerini 8 bitlik binary formata dönüştür
+            binary_value2 = np.binary_repr(pixel_value2,width=8)
             print(binary_value1)
             print(binary_value2)
             pass
@@ -102,17 +100,16 @@ def see_histogram(image1,image2):
 
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))
-    # Birinci grafik paneline histogramı çiz
     axes[0].plot(histogram1, color='black')
     axes[0].set_title('Image1')
-    axes[0].set_xlabel('Piksel Değeri')
-    axes[0].set_ylabel('Piksel Sayısı')
+    axes[0].set_xlabel('Pixel Values')
+    axes[0].set_ylabel('Pixel Count')
 
     # İkinci grafik paneline kümülatif histogramı çiz
     axes[1].plot(histogram2, color='black')
     axes[1].set_title('Image2')
-    axes[1].set_xlabel('Piksel Değeri')
-    axes[1].set_ylabel('Piksel Sayısı')
+    axes[1].set_xlabel('Pixel Values')
+    axes[1].set_ylabel('Pixel Count')
 
     # Grafikleri göster
     plt.tight_layout()

@@ -3,20 +3,20 @@ import helpers as help
 
 
 
-#image1 grayscale olarak okunur
-#image2 renkli olarak okunur
-#image1 in en degerli 6 biti image2 nin rgb kanalarinin en degersiz 2 bitine yerlestirilir
 
-#resimlerin okunmasi
+#image1 reads in Gray Scale 
+#image2 reads in RGB
+
+#Read the images
 image1,image2=help.read_images("street.jpg","slainte.jpg")
 
-#renkli resmin rgb kanallarinin son 2 bitini 0la
+#Set 0 to LSB 2 bits of rgb image
 image2_zeros=help.LSB_2_bit_to_0(image2)
 
-#renkli resmin icine grayscale image i gizle
+#Encode image
 cipher_image=help.encode_image(image1,image2_zeros)
 
-#resmi coz
+#Decode image
 message_image=help.decode_image(cipher_image)
 
 
