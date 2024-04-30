@@ -17,8 +17,6 @@ def read_images(image_name1,image_name2):
 
 #Set LSB 2 bits to 0 of rgb image
 def LSB_2_bit_to_0(image):
-    #1100 1111 0xCF 
-    # temp=cv2.bitwise_and(image, np.array([0xCF, 0xCF, 0xCF], dtype=np.uint8))
     temp=cv2.bitwise_and(image, np.array([0xFC, 0xFC, 0xFC], dtype=np.uint8))
     return temp
 
@@ -29,9 +27,9 @@ def encode_image(message_image,encoding_image):
     MSB_middle_mask=0x30
     MSB_tail_mask=0xC
     
-    shift_head= 6 #6   #0xCF ise 2
-    shift_middle=4#4  #0xCF ise 0
-    shift_tail=2 #2    #0xCF ise 2 ama sola otele
+    shift_head= 6    
+    shift_middle=4
+    shift_tail=2    
 
     and1=cv2.bitwise_and(message_image,MSB_head_mask)
     filter1=and1 >> shift_head
@@ -40,7 +38,7 @@ def encode_image(message_image,encoding_image):
     filter2= and2 >> shift_middle
 
     and3=cv2.bitwise_and(message_image,MSB_tail_mask)
-    filter3= and3 >> shift_tail  #and3>>shift_tail   #0xCF ise sola oteleme
+    filter3= and3 >> shift_tail  
 
     r_channel = encoding_image[:, :, 2]
     g_channel = encoding_image[:, :, 1]  
@@ -113,12 +111,10 @@ def see_histogram(image1,image2):
     axes[0].set_xlabel('Pixel Values')
     axes[0].set_ylabel('Pixel Count')
 
-    # İkinci grafik paneline kümülatif histogramı çiz
     axes[1].bar(range(256), histogram2[:,0], color='black')
     axes[1].set_title('Image2')
     axes[1].set_xlabel('Pixel Values')
     axes[1].set_ylabel('Pixel Count')
 
-    # Grafikleri göster
     plt.tight_layout()
     plt.show()

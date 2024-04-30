@@ -5,7 +5,7 @@ import helpers as help
 #image2 reads in RGB
 
 #Read the images
-message_image,encoding_image=help.read_images("street.jpg","slainte.jpg")
+message_image,encoding_image=help.read_images("slainte.jpg","wholefoods.jpg")
 
 #Set 0 to LSB 2 bits of rgb image
 encoding_image_zeros=help.LSB_2_bit_to_0(encoding_image)
@@ -21,7 +21,7 @@ cv2.imshow('Cipher', cipher_image)
 
 cv2.imshow('Message', decoded_image)
 
-# help.see_histogram(encoding_image,encoding_image_zeros)
+help.see_histogram(encoding_image,encoding_image_zeros)
 
 
 cv2.waitKey(0)
