@@ -1,30 +1,27 @@
 import cv2
 import helpers as help
 
-
-
-
 #image1 reads in Gray Scale 
 #image2 reads in RGB
 
 #Read the images
-image1,image2=help.read_images("street.jpg","slainte.jpg")
+message_image,encoding_image=help.read_images("street.jpg","slainte.jpg")
 
 #Set 0 to LSB 2 bits of rgb image
-image2_zeros=help.LSB_2_bit_to_0(image2)
+encoding_image_zeros=help.LSB_2_bit_to_0(encoding_image)
 
 #Encode image
-cipher_image=help.encode_image(image1,image2_zeros)
+cipher_image=help.encode_image(message_image,encoding_image_zeros)
 
 #Decode image
-message_image=help.decode_image(cipher_image)
+decoded_image=help.decode_image(cipher_image)
 
 
 cv2.imshow('Cipher', cipher_image)
 
-cv2.imshow('Message', message_image)
+cv2.imshow('Message', decoded_image)
 
-# help.see_histogram(image2,image2_zeros)
+# help.see_histogram(encoding_image,encoding_image_zeros)
 
 
 cv2.waitKey(0)
